@@ -12,7 +12,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,7 +43,7 @@ public class Spider {
 	
 	private String bfFile = ROOT_PATH+"bloomFilter.data";
 	
-	private String logFile = ROOT_PATH+"bloomFilter.log";
+	private String logFile = ROOT_PATH+"log%g%u.log";
 	
 	private ExecutorService threadPool;
 	
@@ -166,7 +170,7 @@ public class Spider {
 				result.append(line);
 			}
 		} catch (IOException e) {
-			logger.info("网址不存在！" + e);
+			logger.finest("网址不存在:"+ url);
 		} finally {
 			try {
 				if(is!=null){
@@ -317,18 +321,43 @@ public class Spider {
 	}
 	
 	/**
+	 * 构造日志
+	 * @author:InkYi
+	 * @time:2016年8月29日 - 下午7:10:28
+	 * @description:
+	 */
+	public void buildLogHandler(){
+		try {
+			ConsoleHandler consoleHandler = new ConsoleHandler();
+			consoleHandler.setLevel(Level.ALL);
+			
+			FileHandler fileHandler = new FileHandler(logFile,50000,10,false);
+			fileHandler.setLevel(Level.INFO);
+			fileHandler.setFormatter(new SimpleFormatter());
+			
+			logger.addHandler(fileHandler);
+			logger.addHandler(consoleHandler);
+			logger.setLevel(Level.ALL);
+		}  catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/**
 	 * 初始化
 	 * @author:InkYi
+	 * @throws IOException 
+	 * @throws SecurityException 
 	 * @time:2016年8月29日 - 下午5:48:02
 	 * @description:
 	 */
 	private void init() {
-		logger.info("------------init bengin---------");
+		buildLogHandler();
 		buildThreadPool(threadNum);
 		buildBloomFilter(bm, bk);
 		buildFolder(ROOT_PATH);
 		buildTimer(1000 * 60,1000 * 60 * 2);
-		logger.info("------------init end---------");
 	}
 
 	/**
@@ -343,6 +372,6 @@ public class Spider {
 	}
 	
 	public static void main(String[] args) {
-		Spider.create().thread(10).executes(10).urlLength(6).bloomFilter(10000000, 4).run();
+		Spider.create().thread(10).executes(1000).urlLength(6).bloomFilter(10000000, 4).run();
 	}
 }
