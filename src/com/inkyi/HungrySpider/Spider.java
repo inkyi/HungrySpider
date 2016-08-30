@@ -31,33 +31,33 @@ import com.inkyi.util.SerializeUtil;
  */
 public class Spider {
 	
-	private Logger logger = Logger.getLogger("Spider");
+	private Logger logger = Logger.getLogger("Spider");//log
 	
-	private final String WS_PREFIX = "http://www.";
+	private final String WS_PREFIX = "http://www.";//网址前缀
 
-	private final String WS_SUFFIX = ".com";
+	private final String WS_SUFFIX = ".com";//网址后缀
 	
-	private final String ROOT_PATH = "E:\\HSpider\\";
+	private final String ROOT_PATH = "E:\\HSpider\\";//根路径
 
-	private String websiteFile = ROOT_PATH+"website.txt";
+	private String websiteFile = ROOT_PATH+"website.txt";//网址库
 	
-	private String bfFile = ROOT_PATH+"bloomFilter.data";
+	private String bfFile = ROOT_PATH+"bloomFilter.data";//过滤器序列化文件
 	
-	private String logFile = ROOT_PATH+"log%g%u.log";
+	private String logFile = ROOT_PATH+"log%g%u.log";//日志文件
 	
-	private ExecutorService threadPool;
+	private ExecutorService threadPool;//线程池
 	
-	private BloomFilter<String> bloomFilter;
+	private BloomFilter<String> bloomFilter;//布隆过滤器
 	
-	private int threadNum = 1;
+	private int threadNum = 1;//最大线程数
 	
-	private Integer executes = 10000;
+	private Integer executes = 10000;//执行次数
 	
-	private Integer urlLength = 6;
+	private Integer urlLength = 6;//网址长度
 	
-	private Integer bm = 10000000;
+	private Integer bm = 10000000;//过滤器大小
 	
-	private Integer bk = 4;
+	private Integer bk = 4;//过滤器数字
 	
 	/**
 	 * 创建对象
